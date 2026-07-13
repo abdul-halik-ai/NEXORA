@@ -1,0 +1,471 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  STUDENT
+  MENTOR
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  IN_PROGRESS
+  COMPLETED
+  REJECTED
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELLED
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum LogType {
+  USER_EVENT
+  SECURITY_EVENT
+  TRANSACT_EVENT
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  passwordHash  String
+  name          String
+  role          Role           @default(STUDENT)
+  avatar        String?
+  college       String?
+  department    String?
+  year          String?
+  phone         String?
+  isVerified    Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  
+  // Relations
+  mentorProfile MentorProfile?
+  adminProfile  AdminProfile?
+  downloads     Download[]
+  favorites     Favorite[]
+  orders        Order[]
+  subscriptions Subscription[]
+  reviews       Review[]
+  comments      Comment[]
+  notifications Notification[]
+  certificates  Certificate[]
+  activityLogs  ActivityLog[]
+  tickets       SupportTicket[]
+}
+
+model MentorProfile {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  specialty   String[] // E.g., ["Machine Learning", "IoT"]
+  experience  String   // E.g., "3 Years"
+  bio         String   @db.Text
+  rating      Float    @default(5.0)
+  isApproved  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AdminProfile {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  permissions String[] // E.g., ["manage_projects", "manage_payments"]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  auditLogs   AuditLog[]
+}
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  slug      String    @unique
+  icon      String    // Lucide icon name string
+  projects  Project[]
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Tag {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  slug      String    @unique
+  projects  Project[]
+  products  Product[]
+}
+
+model Project {
+  id              String      @id @default(uuid())
+  title           String
+  slug            String      @unique
+  description     String
+  longDescription String      @db.Text
+  features        String[]    // List of features
+  technologies    String[]    // List of technologies used
+  difficulty      Difficulty  @default(BEGINNER)
+  duration        String      // E.g., "4 weeks"
+  image           String      // Primary cover image URL
+  screenshots     String[]    // List of screenshot URLs
+  demoVideo       String?     // Video preview URL
+  docUrl          String?     // PDF/Word documentation URL
+  codeUrl         String?     // Zip file download URL
+  githubUrl       String?
+  installationGuide String?   @db.Text
+  version         String      @default("1.0.0")
+  license         String      @default("MIT")
+  
+  // Pricing
+  isPremium       Boolean     @default(false)
+  price           Float       @default(0.0)
+  discountPrice   Float?
+  
+  // Relations
+  categoryId      String
+  category        Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  tags            Tag[]
+  downloadCount   Int         @default(0)
+  isApproved      Boolean     @default(true)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  
+  downloads       Download[]
+  favorites       Favorite[]
+  reviews         Review[]
+  comments        Comment[]
+  orderItems      OrderItem[]
+}
+
+model Product {
+  id            String      @id @default(uuid())
+  name          String
+  slug          String      @unique
+  description   String      @db.Text
+  price         Float
+  discountPrice Float?
+  image         String
+  fileUrl       String      // Source code / PDF note link
+  downloadCount Int         @default(0)
+  rating        Float       @default(5.0)
+  version       String      @default("1.0.0")
+  license       String      @default("Personal Use")
+  isActive      Boolean     @default(true)
+  
+  // Relations
+  categoryId    String
+  category      Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  tags          Tag[]
+  orderItems    OrderItem[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Download {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId    String
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  downloadedAt DateTime @default(now())
+}
+
+model Favorite {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, projectId])
+}
+
+model Order {
+  id             String      @id @default(uuid())
+  userId         String
+  user           User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  totalAmount    Float
+  discountAmount Float       @default(0.0)
+  payableAmount  Float
+  status         OrderStatus @default(PENDING)
+  couponCode     String?
+  paymentId      String?     @unique
+  invoiceId      String?     @unique
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  orderItems     OrderItem[]
+  payment        Payment?
+  invoice        Invoice?
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  price     Float
+  quantity  Int      @default(1)
+}
+
+model Payment {
+  id            String   @id @default(uuid())
+  orderId       String   @unique
+  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  method        String   // E.g., "razorpay", "stripe", "upi"
+  status        String   // E.g., "captured", "failed"
+  transactionId String   @unique
+  amount        Float
+  createdAt     DateTime @default(now())
+}
+
+model Invoice {
+  id             String   @id @default(uuid())
+  orderId        String   @unique
+  order          Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  invoiceNumber  String   @unique
+  gstNumber      String?
+  billingAddress String   @db.Text
+  pdfUrl         String
+  createdAt      DateTime @default(now())
+}
+
+model Coupon {
+  id                String   @id @default(uuid())
+  code              String   @unique
+  discountPercent   Float
+  maxDiscountAmount Float
+  minOrderAmount    Float
+  expiryDate        DateTime
+  usageLimit        Int
+  usageCount        Int      @default(0)
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+}
+
+model Subscription {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planName        String   // E.g., "Premium Mentor Channel"
+  status          String   // E.g., "active", "cancelled"
+  price           Float
+  startDate       DateTime @default(now())
+  endDate         DateTime
+  nextBillingDate DateTime
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Request {
+  id           String             @id @default(uuid())
+  studentName  String
+  email        String
+  phone        String
+  college      String
+  department   String
+  year         String
+  projectTitle String
+  description  String             @db.Text
+  technologies String[]
+  deadline     DateTime
+  budget       Float
+  docUrl       String?
+  status       RequestStatus      @default(PENDING)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  milestones   RequestMilestone[]
+}
+
+model RequestMilestone {
+  id          String   @id @default(uuid())
+  requestId   String
+  request     Request  @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  title       String
+  description String   @db.Text
+  status      String   // E.g., "Pending", "In Progress", "Completed"
+  percent     Int      @default(0) // E.g., 25% complete
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  rating    Int
+  comment   String   @db.Text
+  createdAt DateTime @default(now())
+
+  @@unique([userId, projectId])
+}
+
+model Comment {
+  id        String    @id @default(uuid())
+  text      String    @db.Text
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId String
+  project   Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  parentId  String?
+  parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   Comment[] @relation("CommentReplies")
+  createdAt DateTime  @default(now())
+}
+
+model SupportTicket {
+  id          String          @id @default(uuid())
+  userId      String
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject     String
+  category    String          // E.g., "Installation", "Payment"
+  priority    String          // E.g., "Low", "Medium", "High"
+  status      TicketStatus    @default(OPEN)
+  messages    TicketMessage[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model TicketMessage {
+  id          String        @id @default(uuid())
+  ticketId    String
+  ticket      SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  senderId    String
+  senderName  String
+  text        String        @db.Text
+  isFromStaff Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Testimonial {
+  id          String   @id @default(uuid())
+  studentName String
+  college     String
+  role        String
+  comment     String   @db.Text
+  rating      Int      @default(5)
+  avatar      String?
+  isFeatured  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model Blog {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  content     String   @db.Text
+  image       String
+  author      String
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Tutorial {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  content     String   @db.Text
+  category    String
+  readTime    String
+  level       String   // E.g., "Beginner", "Advanced"
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Roadmap {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  steps       String[] // List of milestones
+  category    String
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Certificate {
+  id                String   @id @default(uuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type              String   // E.g., "Project Completion"
+  title             String
+  certificateNumber String   @unique
+  fileUrl           String
+  issuedAt          DateTime @default(now())
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activity  String
+  logType   LogType  @default(USER_EVENT)
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id          String       @id @default(uuid())
+  adminId     String
+  admin       AdminProfile @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  action      String       // E.g., "CREATE_PROJECT"
+  targetTable String
+  targetId    String
+  details     String       @db.Text
+  ipAddress   String?
+  createdAt   DateTime     @default(now())
+}
+
+model Message {
+  id          String   @id @default(uuid())
+  senderId    String   // Session user ID or "guest-session-id"
+  senderName  String
+  receiverId  String?  // Empty for broadcasts or target admin ID
+  text        String   @db.Text
+  isFromAdmin Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
