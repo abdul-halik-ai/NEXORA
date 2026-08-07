@@ -14,7 +14,7 @@ import { useToast } from '@/context/ToastContext'
 
 export default function StudentDashboard() {
   const { toast } = useToast()
-  const { user, loading } = useAuth()
+  const { user, loading, refreshUser } = useAuth()
   const router = useRouter()
   const [activeTab, setActiveTab] = useState<'profile' | 'downloads' | 'requests' | 'purchases' | 'tickets' | 'wishlist' | 'certificates' | 'notifications' | 'settings'>('profile')
 
@@ -128,9 +128,24 @@ export default function StudentDashboard() {
     e.preventDefault()
     setUpdating(true)
     setUpdateSuccess('')
-    await new Promise(resolve => setTimeout(resolve, 800))
-    setUpdateSuccess('Profile settings updated successfully!')
-    setUpdating(false)
+    try {
+      const res = await fetch('/api/auth/me', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, college, department, year })
+      })
+      if (res.ok) {
+        await refreshUser()
+        setUpdateSuccess('Profile settings updated successfully!')
+      } else {
+        toast('Failed to update profile', 'error')
+      }
+    } catch (err) {
+      console.error(err)
+      toast('An error occurred while updating', 'error')
+    } finally {
+      setUpdating(false)
+    }
   }
 
   // Raise new Support ticket
@@ -274,7 +289,15 @@ export default function StudentDashboard() {
           
           {activeTab === 'profile' && (
             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-6">
-              <h3 className="text-base font-bold text-slate-900 dark:text-white">Academic Details</h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">Academic Details</h3>
+                <button 
+                  onClick={() => setActiveTab('settings')}
+                  className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs transition-colors"
+                >
+                  Edit Profile
+                </button>
+              </div>
               <div className="grid sm:grid-cols-2 gap-6">
                 <div className="space-y-1 text-xs">
                   <span className="font-semibold text-slate-400 uppercase text-[10px]">Name</span>

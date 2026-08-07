@@ -1,6 +1,9 @@
-# ProjectHub 🎓
+<div align="center">
+  <img src="./public/logo.png" alt="Nexora Logo" width="200" />
+</div>
 
-ProjectHub is a premium, modern, responsive, and scalable web application built with **Next.js 15 (App Router)** designed to help school, engineering, arts & science, and college students find free projects, request custom creations, and prepare with academic resource materials.
+# Nexora 🎓
+Nexora is a premium, modern, responsive, and scalable web application built with **Next.js 15 (App Router)** designed to help school, engineering, arts & science, and college students find free projects, request custom creations, and prepare with academic resource materials.
 
 ## 🛠 Tech Stack
 
@@ -101,6 +104,12 @@ npx prisma db seed
 npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) to view the application.
+
+If you are using Windows PowerShell and encounter an error about script execution policies, run this once in the current terminal session before starting the app:
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+npm run dev
+```
 
 ---
 

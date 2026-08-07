@@ -29,15 +29,15 @@ export default function Footer() {
     <footer className="bg-slate-50 dark:bg-slate-950 border-t border-slate-200/50 dark:border-slate-900/50 transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-          
+
           {/* Logo & Info */}
           <div className="space-y-6">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 to-violet-600 text-white shadow-md">
-                <GraduationCap className="h-6 w-6" />
+            <Link href="/" className="flex items-center space-x-2 group">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl overflow-hidden shadow-md group-hover:scale-110 group-hover:-rotate-3 hover:shadow-blue-500/50 transition-all duration-300 ease-out">
+                <img src="/logo.png" alt="Nexora Logo" className="h-full w-full object-cover" />
               </div>
               <span className="text-xl font-bold dark:text-white tracking-tight">
-                Project<span className="text-blue-600 dark:text-blue-400">Hub</span>
+                Nexora
               </span>
             </Link>
             <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xs leading-relaxed">
@@ -46,15 +46,15 @@ export default function Footer() {
             <div className="space-y-3">
               <div className="flex items-center space-x-3 text-slate-500 dark:text-slate-400 text-sm">
                 <Mail className="h-4.5 w-4.5 text-blue-500" />
-                <span>support@projecthub.edu</span>
+                <span>abdulhalik1541@gmail.com</span>
               </div>
               <div className="flex items-center space-x-3 text-slate-500 dark:text-slate-400 text-sm">
                 <Phone className="h-4.5 w-4.5 text-blue-500" />
-                <span>+91 44 2490 8593</span>
+                <span>+91 99629 91541</span>
               </div>
               <div className="flex items-center space-x-3 text-slate-500 dark:text-slate-400 text-sm">
                 <MapPin className="h-4.5 w-4.5 text-blue-500" />
-                <span>IIT Madras Research Park, Chennai, India</span>
+                <span>Nexora Company, Natham, Dindigul, Tamil Nadu, India</span>
               </div>
             </div>
           </div>
@@ -138,11 +138,10 @@ export default function Footer() {
                 <button
                   type="submit"
                   disabled={subscribed}
-                  className={`flex items-center justify-center rounded-r-xl px-4 py-2 text-sm font-semibold text-white shadow-md transition-colors ${
-                    subscribed 
-                      ? 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-500/10' 
-                      : 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/10'
-                  }`}
+                  className={`flex items-center justify-center rounded-r-xl px-4 py-2 text-sm font-semibold text-white shadow-md transition-colors ${subscribed
+                    ? 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-500/10'
+                    : 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/10'
+                    }`}
                 >
                   {subscribed ? <Check className="h-4.5 w-4.5" /> : <Send className="h-4.5 w-4.5" />}
                 </button>
@@ -153,7 +152,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 border-t border-slate-200/50 dark:border-slate-900/50 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-slate-400">
-          <p>&copy; {new Date().getFullYear()} ProjectHub. Designed for academic excellence. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Nexora. Designed for academic excellence. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link href="#" className="hover:text-blue-500 transition-colors">Privacy Policy</Link>
             <Link href="#" className="hover:text-blue-500 transition-colors">Terms of Service</Link>

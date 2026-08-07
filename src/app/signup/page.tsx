@@ -129,8 +129,8 @@ export default function SignupPage() {
         
         {/* Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 to-violet-600 text-white shadow-md mx-auto">
-            <GraduationCap className="h-7 w-7" />
+          <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl overflow-hidden shadow-md mx-auto hover:scale-110 hover:-rotate-3 hover:shadow-blue-500/50 transition-all duration-300 ease-out cursor-pointer">
+            <img src="/logo.png" alt="Nexora Logo" className="h-full w-full object-cover" />
           </div>
           <h2 className="text-2xl font-bold dark:text-white">Create student account</h2>
           <p className="text-xs text-slate-400">Join Free to download files and ask compilation support questions.</p>
@@ -335,7 +335,7 @@ export default function SignupPage() {
 
               <div className="space-y-1.5">
                 <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">Choose an account</h3>
-                <p className="text-[10px] text-slate-400">to continue to <span className="font-bold text-blue-500">ProjectHub</span></p>
+                <p className="text-[10px] text-slate-400">to continue to <span className="font-bold text-blue-500">Nexora</span></p>
               </div>
 
               <div className="space-y-2 pt-2">
@@ -360,7 +360,7 @@ export default function SignupPage() {
               </div>
 
               <div className="text-[9px] text-slate-400 leading-relaxed text-center pt-2">
-                To safe-guard your credentials, ProjectHub requests name, email address, and avatar image metadata from Google.
+                To safe-guard your credentials, Nexora requests name, email address, and avatar image metadata from Google.
               </div>
             </motion.div>
           </div>

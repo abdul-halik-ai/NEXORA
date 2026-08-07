@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-const COOKIE_NAME = 'projecthub_session'
+const COOKIE_NAME = 'nexora_session'
 
 // Lightweight base64 decode to make it Edge Runtime compatible without external modules
 function decodeJWT(token: string) {
@@ -46,10 +46,30 @@ export function middleware(request: NextRequest) {
     }
   }
 
+  // 3. Protected Content (Project Details, Marketplace Items, Learning Tools, AI)
+  const isProtectedContent = 
+    (pathname.startsWith('/projects/') && pathname !== '/projects') ||
+    (pathname.startsWith('/marketplace/') && pathname !== '/marketplace') ||
+    pathname.startsWith('/learning') ||
+    pathname.startsWith('/ai-tools');
+
+  if (isProtectedContent) {
+    if (!token) {
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+  }
+
   return NextResponse.next()
 }
 
 // Intercept only protected areas to keep static layouts and public APIs extremely fast
 export const config = {
-  matcher: ['/dashboard/:path*', '/admin/:path*'],
+  matcher: [
+    '/dashboard/:path*', 
+    '/admin/:path*',
+    '/projects/:path*',
+    '/marketplace/:path*',
+    '/learning/:path*',
+    '/ai-tools/:path*'
+  ],
 }

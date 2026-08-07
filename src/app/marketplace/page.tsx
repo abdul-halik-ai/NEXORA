@@ -15,14 +15,10 @@ export default function MarketplacePage() {
 
   useEffect(() => {
     async function fetchProducts() {
-      try {
-        const res = await fetch('/api/projects')
-        const data = await res.json()
-        
         // Custom marketplace products (mock/db combined)
         // If DATABASE_URL is active it pulls from category, otherwise falls back to services mock
-        const marketplaceRes = await fetch('/api/categories') // helper endpoint
         
+        // We will seed custom items locally if API is basic
         // We will seed custom items locally if API is basic
         setProducts([
           {
@@ -96,11 +92,7 @@ export default function MarketplacePage() {
             type: 'EBOOKS'
           }
         ])
-      } catch (err) {
-        console.error(err)
-      } finally {
         setLoading(false)
-      }
     }
     fetchProducts()
   }, [])

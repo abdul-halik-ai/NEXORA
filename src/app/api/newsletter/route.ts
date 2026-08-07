@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     await services.createNotification(
       'default-student-id', 
       'Newsletter Subscribed', 
-      `Successfully registered email ${email} for the ProjectHub academic bulletin.`
+      `Successfully registered email ${email} for the Nexora academic bulletin.`
     )
 
     return NextResponse.json({ success: true })

@@ -29,7 +29,7 @@ export default function AboutPage() {
 
   const team = [
     { name: 'Prof. A. K. Sundar', role: 'Head Academic Advisor', desc: 'Retired Dean of Engineering, guiding our curriculum relevance and IEEE documentation standards.', img: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=200&q=80' },
-    { name: 'Abdul Halik', role: 'Principal Software Engineer', desc: 'Full-stack developer specialized in NextJS App Router optimization and database scaling.', img: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=200&q=80' },
+    { name: 'Abdul Halik', role: 'Principal Software Engineer', desc: 'Full-stack developer specialized in NextJS App Router optimization and database scaling.', img: '/founder.jpg' },
     { name: 'Dr. Meera Nair', role: 'IoT & Robotics Lead', desc: 'Hardware designer coordinating our ESP32, Arduino microcontrollers, and circuit tutorials.', img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80' },
   ]
 
@@ -45,13 +45,13 @@ export default function AboutPage() {
       {/* Hero Section */}
       <div className="text-center max-w-3xl mx-auto space-y-6">
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
-          <Sparkles className="h-3 w-3" /> About ProjectHub
+          <Sparkles className="h-3 w-3" /> About Nexora
         </span>
         <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent dark:from-blue-400 dark:to-indigo-300">
           We Build the Future of Student Engineering
         </h1>
         <p className="text-base text-slate-500 dark:text-slate-400 leading-relaxed">
-          ProjectHub is not just a project downloader. We are a complete academic ecosystem bridge helping school, engineering, and diploma students learn to code, launch products, and ace examinations with clean code structures.
+          Nexora is not just a project downloader. We are a complete academic ecosystem bridge helping school, engineering, and diploma students learn to code, launch products, and ace examinations with clean code structures.
         </p>
       </div>
 
@@ -190,7 +190,7 @@ export default function AboutPage() {
             <div className="flex gap-3 pt-2">
               <button 
                 onClick={() => {
-                  toast('Application recorded! Please email your portfolio to careers@projecthub.in', 'success')
+                  toast('Application recorded! Please email your portfolio to careers@nexora.in', 'success')
                   setSelectedJob(null)
                 }}
                 className="flex-1 px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 rounded-xl transition-all duration-200 shadow-sm"

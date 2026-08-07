@@ -17,18 +17,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ProjectHub | Academic Projects & Learning Resources for Students",
+  title: "Nexora | Academic Projects & Learning Resources for Students",
   description: "Find free projects, download source codes, request custom engineering/arts projects, and prepare with roadmaps, DSA notes, and interview prep guides.",
   keywords: ["academic projects", "engineering projects", "final year projects", "free code download", "python projects", "web dev projects", "IoT robotics", "school projects"],
   openGraph: {
-    title: "ProjectHub | Academic Projects & Resources",
+    title: "Nexora | Academic Projects & Resources",
     description: "Get free project source codes, reports, synopses, and direct academic chat support.",
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "ProjectHub | Academic Projects & Resources",
+    title: "Nexora | Academic Projects & Resources",
     description: "Find free code downloads and academic guides.",
   }
 };

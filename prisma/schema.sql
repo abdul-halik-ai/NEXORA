@@ -1,4 +1,4 @@
--- ProjectHub PostgreSQL Schema
+-- Nexora PostgreSQL Schema
 -- Directly compatible with Supabase SQL Editor
 
 -- Create Roles Enum

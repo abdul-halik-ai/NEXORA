@@ -84,11 +84,11 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2 group">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 to-violet-600 text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform duration-300">
-                <GraduationCap className="h-6 w-6" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl overflow-hidden shadow-md shadow-blue-500/20 group-hover:scale-110 group-hover:-rotate-3 hover:shadow-blue-500/50 transition-all duration-300 ease-out">
+                <img src="/logo.png" alt="Nexora Logo" className="h-full w-full object-cover" />
               </div>
               <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 tracking-tight">
-                Project<span className="text-blue-600 dark:text-blue-400">Hub</span>
+                <span className="text-blue-600 dark:text-blue-400">Nexora</span>
               </span>
             </Link>
           </div>

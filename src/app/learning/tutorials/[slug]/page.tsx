@@ -58,7 +58,7 @@ $ git commit -m "feat: initialize Next.js client layout and Prisma schema"`
         heading: '4. Linking to Remote GitHub Server',
         paragraph: 'Connect your local repository to a remote server and push your commit history:',
         code: `# Add remote origin link
-$ git remote add origin https://github.com/student/projecthub-setup.git
+$ git remote add origin https://github.com/student/nexora-setup.git
 # Push main branch
 $ git branch -M main
 $ git push -u origin main`

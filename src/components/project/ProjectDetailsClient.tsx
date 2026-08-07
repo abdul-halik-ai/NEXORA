@@ -67,7 +67,7 @@ export default function ProjectDetailsClient({
 
         // Trigger file download mock
         const element = document.createElement("a");
-        const file = new Blob(["// ProjectHub Download Key: PH-" + project.id + "\n// Source Code file for " + project.title + "\nconsole.log('Project Initialized successfully');"], {type: 'text/plain'});
+        const file = new Blob(["// Nexora Download Key: NX-" + project.id + "\n// Source Code file for " + project.title + "\nconsole.log('Project Initialized successfully');"], {type: 'text/plain'});
         element.href = URL.createObjectURL(file);
         element.download = `${project.slug}-source-code.zip`;
         document.body.appendChild(element);

@@ -1,9 +1,9 @@
 'use client'
 
 import React, { useState } from 'react'
-import { 
-  Mail, Phone, MapPin, MessageCircle, Clock, 
-  Send, AlertCircle, CheckCircle2 
+import {
+  Mail, Phone, MapPin, MessageCircle, Clock,
+  Send, AlertCircle, CheckCircle2
 } from 'lucide-react'
 
 export default function ContactPage() {
@@ -11,7 +11,7 @@ export default function ContactPage() {
   const [email, setEmail] = useState('')
   const [subject, setSubject] = useState('')
   const [message, setMessage] = useState('')
-  
+
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState('')
 
@@ -23,7 +23,7 @@ export default function ContactPage() {
     // Simulate backend email handler API
     await new Promise(resolve => setTimeout(resolve, 1000))
     setSuccess('Thank you! Your academic ticket has been raised. Check email for updates.')
-    
+
     setName('')
     setEmail('')
     setSubject('')
@@ -33,7 +33,7 @@ export default function ContactPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-      
+
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto space-y-4 mb-16">
         <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest">Helpdesk Support</span>
@@ -42,19 +42,19 @@ export default function ContactPage() {
       </div>
 
       <div className="grid lg:grid-cols-3 gap-8 items-start">
-        
+
         {/* Info Credentials Sidebar */}
         <div className="lg:col-span-1 space-y-6">
-          
+
           <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-2xl p-6 space-y-5 shadow-sm">
             <h3 className="text-sm font-bold text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-3">Support Info</h3>
-            
+
             <div className="space-y-4">
               <div className="flex items-start space-x-3.5 text-xs">
                 <Mail className="h-5 w-5 text-blue-500 flex-shrink-0" />
                 <div>
                   <h4 className="font-bold text-slate-900 dark:text-white">Email Address</h4>
-                  <p className="text-slate-500 dark:text-slate-400 mt-0.5">support@projecthub.edu</p>
+                  <p className="text-slate-500 dark:text-slate-400 mt-0.5">abdulhalik1541@gmail.com</p>
                 </div>
               </div>
 
@@ -62,7 +62,7 @@ export default function ContactPage() {
                 <Phone className="h-5 w-5 text-blue-500 flex-shrink-0" />
                 <div>
                   <h4 className="font-bold text-slate-900 dark:text-white">Phone Support</h4>
-                  <p className="text-slate-500 dark:text-slate-400 mt-0.5">+91 44 2490 8593</p>
+                  <p className="text-slate-500 dark:text-slate-400 mt-0.5">+91 99629 91541</p>
                 </div>
               </div>
 
@@ -71,8 +71,8 @@ export default function ContactPage() {
                 <div>
                   <h4 className="font-bold text-slate-900 dark:text-white">Office Location</h4>
                   <p className="text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
-                    IIT Madras Research Park,<br />
-                    Taramani, Chennai - 600113
+                    Nexora Company <br />
+                    Natham, Dindigul - 624401
                   </p>
                 </div>
               </div>
@@ -92,7 +92,7 @@ export default function ContactPage() {
 
           {/* WhatsApp Direct Help */}
           <a
-            href="https://wa.me/914424908593"
+            href="https://wa.me/919962991541"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center space-x-2 w-full rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 text-sm font-semibold shadow-md transition-colors"
@@ -105,10 +105,10 @@ export default function ContactPage() {
 
         {/* Form Container */}
         <div className="lg:col-span-2 space-y-6">
-          
+
           <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
             <h3 className="text-sm font-bold text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-3 mb-4">Send a Message</h3>
-            
+
             {success && (
               <div className="rounded-xl border border-emerald-500/20 bg-emerald-50/50 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 text-xs p-4 flex items-start space-x-2 mb-4">
                 <CheckCircle2 className="h-5 w-5 flex-shrink-0" />

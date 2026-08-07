@@ -98,7 +98,7 @@ export default function HomePage() {
     <div className="relative overflow-hidden bg-grid-pattern bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen">
       
       {/* Background Blobs */}
-      <div className="absolute top-0 left-1/4 -z-10 h-[500px] w-[500px] rounded-full bg-blue-500/10 dark:bg-blue-500/5 blur-[120px] animate-pulse" />
+      <div className="absolute top-0 left-1/4 -z-10 h-[500px] w-[500px] rounded-full bg-blue-500/10 dark:bg-blue-500/5 blur-[120px]" />
       <div className="absolute top-80 right-1/4 -z-10 h-[600px] w-[600px] rounded-full bg-violet-500/10 dark:bg-violet-500/5 blur-[150px]" />
 
       {/* Hero Section */}
@@ -178,7 +178,7 @@ export default function HomePage() {
             <div className="rounded-xl overflow-hidden bg-slate-950 shadow-inner aspect-[16/9] flex items-center justify-center p-4">
               <div className="w-full h-full flex flex-col justify-between text-left font-mono text-xs text-blue-400 select-none">
                 <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-2 text-[10px] text-slate-500">
-                  <span>projecthub-setup.py</span>
+                  <span>nexora-setup.py</span>
                   <div className="flex space-x-1">
                     <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
                     <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
@@ -187,7 +187,7 @@ export default function HomePage() {
                 </div>
                 <div className="flex-grow space-y-1.5 overflow-hidden leading-relaxed text-slate-300">
                   <p><span className="text-violet-500">import</span> tensorflow <span className="text-violet-500">as</span> tf</p>
-                  <p><span className="text-violet-500">from</span> projecthub.nlp <span className="text-violet-500">import</span> PlagiarismDetector</p>
+                  <p><span className="text-violet-500">from</span> nexora.nlp <span className="text-violet-500">import</span> PlagiarismDetector</p>
                   <p className="text-slate-500"># Load dataset and NLP weights</p>
                   <p>detector = PlagiarismDetector(model=<span className="text-emerald-400">"BERT-base-uncased"</span>)</p>
                   <p>detector.load_weights(<span className="text-emerald-400">"./weights/retrained-nlp.h5"</span>)</p>

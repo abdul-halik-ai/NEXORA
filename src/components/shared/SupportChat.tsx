@@ -17,10 +17,10 @@ export default function SupportChat() {
   useEffect(() => {
     let id = user?.id
     if (!id) {
-      id = localStorage.getItem('projecthub_guest_id') || ''
+      id = localStorage.getItem('nexora_guest_id') || ''
       if (!id) {
         id = `guest-${Math.random().toString(36).substring(2, 11)}`
-        localStorage.setItem('projecthub_guest_id', id)
+        localStorage.setItem('nexora_guest_id', id)
       }
     }
     setGuestId(id)
@@ -85,19 +85,27 @@ export default function SupportChat() {
       })
 
       if (res.ok) {
-        // Trigger automated admin helper response after 1.5 seconds
+        // Trigger real AI backend response
         setTimeout(async () => {
           let replyText = 'Thanks for your query! An academic support representative will contact you shortly via email.'
           
-          const q = promptText.toLowerCase()
-          if (q.includes('download') || q.includes('source code')) {
-            replyText = 'To download any project, simply go to its page and click "Download Source Code". Free downloads are available for registered students.'
-          } else if (q.includes('request') || q.includes('custom')) {
-            replyText = 'You can request a custom project by navigating to our "Request Project" page. Fill out your requirements, and our team will quote you within 24 hours.'
-          } else if (q.includes('python') || q.includes('machine learning')) {
-            replyText = 'We have 20+ Python and ML projects ready! Search under the "AI & Machine Learning" category. They come with full code and Jupyter notebook reports.'
-          } else if (q.includes('price') || q.includes('cost') || q.includes('budget')) {
-            replyText = 'All catalog projects on ProjectHub are 100% free! Custom projects have flexible student-friendly pricing starting from 1,500 INR.'
+          try {
+            const aiRes = await fetch('/api/ai', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                tool: 'support-chat',
+                prompt: promptText
+              }),
+            })
+            if (aiRes.ok) {
+              const aiData = await aiRes.json()
+              if (aiData.result) {
+                replyText = aiData.result
+              }
+            }
+          } catch (e) {
+            console.error(e)
           }
 
           await fetch('/api/messages', {
@@ -105,7 +113,7 @@ export default function SupportChat() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               senderId: guestId,
-              senderName: 'Admin Assistant',
+              senderName: 'AI Support Assistant',
               text: replyText,
               isFromAdmin: true,
             }),

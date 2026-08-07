@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import { db } from './db'
 
-const JWT_SECRET = process.env.JWT_SECRET || 'projecthub-secret-key-for-jwt-signing'
-const COOKIE_NAME = 'projecthub_session'
+const JWT_SECRET = process.env.JWT_SECRET || 'nexora-secret-key-for-jwt-signing'
+const COOKIE_NAME = 'nexora_session'
 
 export interface JWTPayload {
   userId: string

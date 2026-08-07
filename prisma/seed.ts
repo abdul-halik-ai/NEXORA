@@ -128,7 +128,7 @@ async function main() {
       studentName: 'Sanjay Kumar',
       college: 'VIT Vellore',
       role: 'B.Tech CSE Student',
-      comment: 'ProjectHub saved me weeks of coding! I downloaded the Smart Plagiarism Detector as a base, extended the NLP engine, and aced my final year presentation.',
+      comment: 'Nexora saved me weeks of coding! I downloaded the Smart Plagiarism Detector as a base, extended the NLP engine, and aced my final year presentation.',
       rating: 5,
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
       isFeatured: true

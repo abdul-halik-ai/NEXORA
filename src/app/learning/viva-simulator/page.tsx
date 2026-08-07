@@ -63,7 +63,7 @@ interface VivaSession {
   currentQuestionIndex: number
   questions: string[]
   answers: string[]
-  feedbacks: { score: number; review: string; tip: string; rubrics: RubricBreakdown }[]
+  feedbacks: { score: number; review: string; tip: string; recommendedAnswer?: string; rubrics: RubricBreakdown }[]
   totalScore: number
 }
 
@@ -89,11 +89,37 @@ export default function AdvancedVivaSimulator() {
 
   // Seed default questions based on domain
   const getQuestionsForDomain = (title: string, domainStr: string) => {
-    return [
+    const defaultQuestions = [
       `Welcome. Can you explain the primary reason for choosing this specific architecture layout for your project: "${title}"?`,
       `In a production environment, if your user load or data fetch count spikes ten-fold, how will you optimize database query times and scale the backend?`,
       `Regarding security: How are you protecting user credentials and preventing malicious inputs (like SQL injection or XSS scripting) in this system?`
     ]
+    
+    if (domainStr.includes('Data Science')) {
+      return [
+        `Welcome. Can you explain the primary dataset and preprocessing pipeline for your project: "${title}"?`,
+        `How did you mitigate model overfitting, and what cross-validation metrics did you use to benchmark your algorithm?`,
+        `If you were to deploy this model in a live edge environment, how would you optimize inference speed?`
+      ]
+    }
+    
+    if (domainStr.includes('Electronics')) {
+      return [
+        `Welcome. Can you explain the primary microcontroller and sensor architecture for your project: "${title}"?`,
+        `How do you handle power optimization and signal noise interference in your hardware design?`,
+        `If you had to scale this IoT architecture to support thousands of nodes, how would your communication protocol hold up?`
+      ]
+    }
+    
+    if (domainStr.includes('Mechanical')) {
+      return [
+        `Welcome. What is the core structural design principle behind your project: "${title}"?`,
+        `Can you walk me through your thermodynamic and stress analysis calculations?`,
+        `How does your proposed design improve efficiency or material cost compared to existing industry standards?`
+      ]
+    }
+    
+    return defaultQuestions
   }
 
   // Text-To-Speech (TTS) Engine
@@ -220,13 +246,14 @@ export default function AdvancedVivaSimulator() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           tool: 'viva-grade',
-          prompt: currentAnswer
+          prompt: JSON.stringify({ question: currentQuestion, answer: currentAnswer })
         })
       })
 
       let score = 7
       let review = 'Response indicates a reasonable conceptual foundation.'
       let tip = 'Provide concrete details on how indexing decreases lookup times.'
+      let recommendedAnswer = 'Consider explaining the core underlying architecture logically.'
 
       if (res.ok) {
         const data = await res.json()
@@ -235,6 +262,7 @@ export default function AdvancedVivaSimulator() {
           score = parsed.score || 7
           review = parsed.review || review
           tip = parsed.tip || tip
+          recommendedAnswer = parsed.recommendedAnswer || recommendedAnswer
         } catch (je) {
           console.warn('JSON parsing error, extracting text values directly')
         }
@@ -249,7 +277,7 @@ export default function AdvancedVivaSimulator() {
       }
 
       // Commit states
-      const updatedFeedbacks = [...session.feedbacks, { score, review, tip, rubrics }]
+      const updatedFeedbacks = [...session.feedbacks, { score, review, tip, recommendedAnswer, rubrics }]
       const updatedAnswers = [...session.answers, currentAnswer]
       const nextIndex = session.currentQuestionIndex + 1
       const isCompleted = nextIndex >= session.questions.length
@@ -630,6 +658,13 @@ export default function AdvancedVivaSimulator() {
                     <div className="border-t border-slate-200/30 dark:border-slate-850 pt-2.5 space-y-1.5">
                       <p className="text-[11px] leading-relaxed text-slate-650 dark:text-slate-400">{session.feedbacks[idx]?.review}</p>
                       <p className="text-[10px] text-violet-550 dark:text-violet-400 font-medium">💡 Focus Point: {session.feedbacks[idx]?.tip}</p>
+                      {session.feedbacks[idx]?.recommendedAnswer && (
+                        <div className="bg-emerald-50 dark:bg-emerald-950/20 p-2 rounded-lg mt-1.5 border border-emerald-100/50 dark:border-emerald-900/50">
+                          <p className="text-[10px] text-emerald-700 dark:text-emerald-400 font-semibold flex items-start gap-1">
+                            <span className="text-emerald-500">✅ Ideal Answer:</span> {session.feedbacks[idx]?.recommendedAnswer}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}

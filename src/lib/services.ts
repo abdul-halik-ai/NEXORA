@@ -155,11 +155,18 @@ let inMemActivityLogs: any[] = []
 let inMemAuditLogs: any[] = []
 let inMemMessages: any[] = []
 let inMemNotifications: any[] = [
-  { id: 'not-1', userId: 'default-student-id', title: 'Welcome to ProjectHub!', message: 'Explore our latest academic projects and find resources for your development.', read: false, createdAt: new Date() }
+  { id: 'not-1', userId: 'default-student-id', title: 'Welcome to Nexora!', message: 'Explore our latest academic projects and find resources for your development.', read: false, createdAt: new Date() }
 ]
+
+// Global circuit breaker to prevent 5s timeout on every poll if DB is sleeping
+let isDbDown = false;
 
 // HELPER: Try database query or catch connection failure
 async function runSafe(dbQuery: () => Promise<any>, fallback: () => any): Promise<any> {
+  if (isDbDown) {
+    return fallback()
+  }
+  
   try {
     if (!process.env.DATABASE_URL) {
       return fallback()
@@ -167,6 +174,7 @@ async function runSafe(dbQuery: () => Promise<any>, fallback: () => any): Promis
     return await dbQuery()
   } catch (error) {
     console.warn('Database connection failed, falling back to In-Memory store.')
+    isDbDown = true; // Trip the circuit breaker
     return fallback()
   }
 }
