@@ -30,6 +30,14 @@ body {
   overflow-x: hidden;
 }
 
+*, *::before, *::after {
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+code, pre, .font-mono {
+  font-family: var(--font-mono), ui-monospace, monospace !important;
+}
+
 /* Glassmorphism Styles */
 .glass {
   background: rgba(255, 255, 255, 0.45);
